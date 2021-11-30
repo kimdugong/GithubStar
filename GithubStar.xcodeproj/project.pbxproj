@@ -17,6 +17,8 @@
 		424B74692755EF3900CFDD19 /* GithubStarTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B74682755EF3900CFDD19 /* GithubStarTests.swift */; };
 		424B74732755EF3900CFDD19 /* GithubStarUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B74722755EF3900CFDD19 /* GithubStarUITests.swift */; };
 		424B74752755EF3900CFDD19 /* GithubStarUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B74742755EF3900CFDD19 /* GithubStarUITestsLaunchTests.swift */; };
+		424B74822755EFD300CFDD19 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B74812755EFD300CFDD19 /* PersistenceManager.swift */; };
+		424B74842756072600CFDD19 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B74832756072600CFDD19 /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,8 @@
 		424B746E2755EF3900CFDD19 /* GithubStarUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GithubStarUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		424B74722755EF3900CFDD19 /* GithubStarUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubStarUITests.swift; sourceTree = "<group>"; };
 		424B74742755EF3900CFDD19 /* GithubStarUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubStarUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		424B74812755EFD300CFDD19 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
+		424B74832756072600CFDD19 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +113,8 @@
 				424B745C2755EF3800CFDD19 /* LaunchScreen.storyboard */,
 				424B745F2755EF3800CFDD19 /* Info.plist */,
 				424B74572755EF3400CFDD19 /* GithubStar.xcdatamodeld */,
+				424B74812755EFD300CFDD19 /* PersistenceManager.swift */,
+				424B74832756072600CFDD19 /* User.swift */,
 			);
 			path = GithubStar;
 			sourceTree = "<group>";
@@ -262,6 +268,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				424B74592755EF3400CFDD19 /* GithubStar.xcdatamodeld in Sources */,
+				424B74822755EFD300CFDD19 /* PersistenceManager.swift in Sources */,
+				424B74842756072600CFDD19 /* User.swift in Sources */,
 				424B74532755EF3400CFDD19 /* ViewController.swift in Sources */,
 				424B744F2755EF3400CFDD19 /* AppDelegate.swift in Sources */,
 				424B74512755EF3400CFDD19 /* SceneDelegate.swift in Sources */,
@@ -451,6 +459,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -479,6 +488,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
