@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User {
+public struct User {
     let name: String
     let avatar: String
 }

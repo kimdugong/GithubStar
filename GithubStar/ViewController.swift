@@ -19,25 +19,13 @@ class ViewController: UIViewController {
         }
     }
 
-    private func updateList() -> [String] {
-        let context = PersistenceManager.shared.persistentContainer.viewContext
-        let entity = NSEntityDescription.entity(forEntityName: "Starred", in: context)
-        let starred = NSManagedObject(entity: entity!, insertInto: context)
-        starred.setValue(names[index], forKey: "name")
-        try! context.save()
-
-        let starredList = try! context.fetch(Starred.fetchRequest())
-        let names = starredList.compactMap{ $0.name }
-        return names
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        list = updateList()
+//        list = updateList()
     }
 
     @IBAction func buttonTapped(_ sender: Any) {
-        list = updateList()
+//        list = updateList()
         index += 1
     }
 

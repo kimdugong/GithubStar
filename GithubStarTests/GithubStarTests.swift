@@ -10,17 +10,63 @@ import XCTest
 
 class GithubStarTests: XCTestCase {
 
+    var starredService: StarredService!
+    var coreDataStack: CoreDataStack!
+
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        coreDataStack = TestCoreDataStack()
+        starredService = StarredService(coreDataStack: coreDataStack)
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        starredService = nil
+        coreDataStack = nil
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testAddStarred() throws {
+        let user = User(name: "dugong", avatar: "https://avatar.com")
+        let starred = starredService.add(user: user)
+
+        XCTAssertEqual(starred.name, "dugong")
+        XCTAssertEqual(starred.avatar, "https://avatar.com")
+    }
+
+    func testFetchStarred() throws {
+        let user = User(name: "dugong", avatar: "https://avatar.com")
+        let _ = starredService.add(user: user)
+        let starreds = starredService.getStarreds()
+
+        XCTAssertNotNil(starreds)
+        XCTAssertEqual(starreds?.count, 1)
+    }
+
+    func testDeleteStarred() throws {
+        let user = User(name: "dugong", avatar: "https://avatar.com")
+        let starred = starredService.add(user: user)
+        var starredList = starredService.getStarreds()
+        XCTAssertEqual(starredList?.count, 1)
+
+        let _ = starredService.delete(starred: starred)
+        starredList = starredService.getStarreds()
+
+        XCTAssertEqual(starredList?.isEmpty, true)
+    }
+
+    func testUpdateStarred() throws {
+        let user = User(name: "dugong", avatar: "https://avatar.com")
+        let starred = starredService.add(user: user)
+
+        XCTAssertEqual(starred.name, "dugong")
+        XCTAssertEqual(starred.avatar, "https://avatar.com")
+
+        starred.name = "kimdugong"
+        starred.avatar = "https://avatar2.com"
+        let _ = starredService.update(starred: starred)
+
+        let starredList = starredService.getStarreds()
+        XCTAssertEqual(starredList?.count, 1)
+        XCTAssertEqual(starredList?.first?.name, "kimdugong")
+        XCTAssertEqual(starredList?.first?.avatar, "https://avatar2.com")
     }
 
     func testPerformanceExample() throws {
