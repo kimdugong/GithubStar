@@ -147,8 +147,6 @@
 				424B74B12758BA6500CFDD19 /* View Controllers */,
 				424B748A27587A0F00CFDD19 /* Supporting files */,
 				424B74852757605500CFDD19 /* Services */,
-				424B744E2755EF3400CFDD19 /* AppDelegate.swift */,
-				424B74502755EF3400CFDD19 /* SceneDelegate.swift */,
 				424B74832756072600CFDD19 /* User.swift */,
 			);
 			path = GithubStar;
@@ -185,6 +183,8 @@
 		424B748A27587A0F00CFDD19 /* Supporting files */ = {
 			isa = PBXGroup;
 			children = (
+				424B74502755EF3400CFDD19 /* SceneDelegate.swift */,
+				424B744E2755EF3400CFDD19 /* AppDelegate.swift */,
 				424B745C2755EF3800CFDD19 /* LaunchScreen.storyboard */,
 				424B745F2755EF3800CFDD19 /* Info.plist */,
 				424B745A2755EF3800CFDD19 /* Assets.xcassets */,
@@ -645,6 +645,7 @@
 				INFOPLIST_FILE = "GithubStar/Supporting files/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
@@ -674,6 +675,7 @@
 				INFOPLIST_FILE = "GithubStar/Supporting files/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
