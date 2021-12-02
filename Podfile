@@ -7,8 +7,12 @@ target 'GithubStar' do
 
   # Pods for GithubStar
 
+  # Extension frameworks 
   pod 'RxSwift'
   pod 'Moya/RxSwift'
+  # UI frameworks
+  pod 'Tabman'
+  pod 'SnapKit'
 
   target 'GithubStarTests' do
     inherit! :search_paths
