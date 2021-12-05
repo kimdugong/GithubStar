@@ -6,21 +6,26 @@
 //
 
 import XCTest
+import Moya
+import RxBlocking
 @testable import GithubStar
 
 class GithubStarTests: XCTestCase {
 
     var starredService: StarredService!
     var coreDataStack: CoreDataStack!
+    var network: Network!
 
     override func setUpWithError() throws {
         coreDataStack = TestCoreDataStack()
         starredService = StarredService(coreDataStack: coreDataStack)
+        network = Network(provider: .mock)
     }
 
     override func tearDownWithError() throws {
         starredService = nil
         coreDataStack = nil
+        network = nil
     }
 
     func testAddStarred() throws {
@@ -67,6 +72,13 @@ class GithubStarTests: XCTestCase {
         XCTAssertEqual(starredList?.count, 1)
         XCTAssertEqual(starredList?.first?.name, "kimdugong")
         XCTAssertEqual(starredList?.first?.avatar, "https://avatar2.com")
+    }
+    
+    func testSearchUsers() throws {
+        let users = network.getUsers(name: "mojombo")
+        let result = try users.toBlocking(timeout: 2).first()?.items.first
+        XCTAssertEqual(result?.avatar, "https://secure.gravatar.com/avatar/25c7c18223fb42a4c6ae1c8db6f50f9b?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png")
+        XCTAssertEqual(result?.name, "mojombo")
     }
 
     func testPerformanceExample() throws {

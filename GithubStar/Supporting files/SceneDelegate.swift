@@ -19,7 +19,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let pages = [RemoteViewController(), LocalViewController()]
+        let pages = [
+            RemoteViewController(viewModel:
+                                    UserTableViewModel(networkProvider: .production,
+                                                       coreDataProvider: .production
+                                                      )
+                                ),
+            LocalViewController()
+        ]
         let rootViewController = UINavigationController(rootViewController: PageViewController(pages: pages))
         window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()

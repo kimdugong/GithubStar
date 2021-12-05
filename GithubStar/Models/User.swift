@@ -7,7 +7,9 @@
 
 import Foundation
 
-public struct User {
+public struct User: Codable {
+    private enum CodingKeys: String, CodingKey { case name = "login", avatar = "avatar_url" }
+    
     let name: String
     let avatar: String
 }

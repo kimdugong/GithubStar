@@ -9,6 +9,7 @@ target 'GithubStar' do
 
   # Extension frameworks 
   pod 'RxSwift'
+  pod 'RxDataSources'
   pod 'Moya/RxSwift'
   # UI frameworks
   pod 'Tabman'
@@ -17,6 +18,7 @@ target 'GithubStar' do
   target 'GithubStarTests' do
     inherit! :search_paths
     # Pods for testing
+    pod 'RxBlocking'
   end
 
   target 'GithubStarUITests' do

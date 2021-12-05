@@ -6,19 +6,38 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 import SnapKit
 
 class RemoteViewController: UIViewController {
+    private let disposeBag: DisposeBag = DisposeBag()
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.register(UserTableViewCell.self, forCellReuseIdentifier: UserTableViewCell.identifier)
-        tableView.backgroundColor = .green
-        tableView.dataSource = self
+        if #available(iOS 13.0, *) {
+            tableView.backgroundColor = .systemGroupedBackground
+        } else {
+            tableView.backgroundColor = .lightGray
+        }
         tableView.delegate = self
+        
+        tableView.tableHeaderView = searchBar
         return tableView
     }()
+    
+    private lazy var searchBar: UISearchBar = {
+        let bar = UISearchBar(frame: CGRect(x: 0, y: 0, width: 0, height: 36 + 16))
+        bar.delegate = self
+        bar.placeholder = "검색어를 입력하세요"
+        return bar
+    }()
+    
+    private let viewModel: UserTableViewModel
 
-    init() {
+    init(viewModel: UserTableViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -29,16 +48,34 @@ class RemoteViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        bind()
     }
 
     private func setupUI() {
-        title = "dugong"
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+//        tableView.tableHeaderView = searchController.searchBar
+//        searchController.obscuresBackgroundDuringPresentation = false
+//        searchController.searchResultsUpdater = self
+//        searchController.hidesNavigationBarDuringPresentation = false
+//        self.extendedLayoutIncludesOpaqueBars = true
     }
     
+    private func bind() {
+        searchBar.rx.text.orEmpty.filter{ $0 != "" }.debounce(.milliseconds(500), scheduler: MainScheduler.instance).distinctUntilChanged().debug("search bar text").bind(to: viewModel.inputs.query).disposed(by: disposeBag)
+        
+        viewModel.inputs.query.withUnretained(viewModel).flatMapLatest{ $0.0.inputs.searchUsers(name: $0.1) }.bind(to: tableView.rx.items(cellIdentifier: UserTableViewCell.identifier, cellType: UserTableViewCell.self)){row, model, cell in
+            let viewModel = UserTableViewCellViewModel(name: model.name, avatar: model.avatar, isStarred: false)
+            cell.configurationCell(viewModel: viewModel)
+        }.disposed(by: disposeBag)
+
+//        viewModel.outputs.dataSource.bind(to: tableView.rx.items(cellIdentifier: UserTableViewCell.identifier, cellType: UserTableViewCell.self)){row, model, cell in
+//            print(model.name)
+//        }.disposed(by: disposeBag)
+    }
     
 }
 
@@ -56,16 +93,12 @@ extension RemoteViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    
 }
 
-extension RemoteViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 50
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.text = "\(indexPath.row)"
-        return cell
+extension RemoteViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print(#function, searchText)
     }
 }

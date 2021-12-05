@@ -11,8 +11,13 @@ import CoreData
 public class StarredService {
     let coreDataStack: CoreDataStack
 
-    public init(coreDataStack: CoreDataStack) {
-        self.coreDataStack = coreDataStack
+    public init(provider: Provider = .production) {
+        switch provider {
+        case .production:
+            self.coreDataStack = CoreDataStack()
+        case .mock:
+            self.coreDataStack = TestCoreDataStack()
+        }
     }
 
     public func getStarreds() -> [Starred]? {

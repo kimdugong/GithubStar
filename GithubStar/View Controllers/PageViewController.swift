@@ -17,7 +17,7 @@ class PageViewController: TabmanViewController {
         bar.backgroundView.style = .blur(style: .extraLight)
         bar.layout.alignment = .centerDistributed
         bar.layout.contentMode = .fit
-        bar.layout.transitionStyle = .snap // Customize
+        bar.layout.transitionStyle = .progressive
         bar.buttons.customize { button in
             button.tintColor = .lightGray
             button.selectedTintColor = .darkText
@@ -44,7 +44,8 @@ class PageViewController: TabmanViewController {
     
     // MARK: - Setting Up UI
     private func setupUI() {
-        title = "Example"
+        title = "Github Stars"
+        navigationController?.navigationBar.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
         
         // MARK: - setup tabman
         bounces = false
@@ -84,6 +85,13 @@ extension PageViewController: PageboyViewControllerDataSource {
 
 extension PageViewController: TMBarDataSource {
     func barItem(for bar: TMBar, at index: Int) -> TMBarItemable {
-        TMBarItem(title: "Page \(index)")
+        switch index {
+        case 0:
+            return TMBarItem(title: "API")
+        case 1:
+            return TMBarItem(title: "로컬")
+        default:
+            return TMBarItem(title: "", badgeValue: nil)
+        }
     }
 }
