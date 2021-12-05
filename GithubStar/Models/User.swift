@@ -12,4 +12,5 @@ public struct User: Codable {
     
     let name: String
     let avatar: String
+    var isStarred: Bool?
 }

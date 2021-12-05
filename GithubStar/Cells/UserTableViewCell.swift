@@ -50,8 +50,8 @@ class UserTableViewCell: UITableViewCell {
     }
     
     func configurationCell(viewModel: UserTableViewCellViewModel) {
-        viewModel.inputs.name.bind(to: userNameLabel.rx.text).disposed(by: disposeBag)
-        viewModel.inputs.avatar
+        viewModel.inputs.user.map{ $0.name }.bind(to: userNameLabel.rx.text).disposed(by: disposeBag)
+        viewModel.inputs.user.map{ URL(string: $0.avatar) }
             .compactMap{ $0 }
             .observe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .flatMapLatest{ URLSession.shared.rx.data(request: URLRequest(url: $0))}
@@ -59,7 +59,15 @@ class UserTableViewCell: UITableViewCell {
 //            .subscribe(on: MainScheduler.instance)
             .bind(to: avatarImageView.rx.image)
             .disposed(by: disposeBag)
+        
         starredButton.rx.tap.bind{ viewModel.inputs.starredButtonTapped() }.disposed(by: disposeBag)
+        
+        viewModel.inputs.user
+            .map{ $0.isStarred ?? false }
+            .asDriver(onErrorJustReturn: false)
+            .map{ $0 ? UIImage(named: "star.fill") : UIImage(named: "star") }
+            .drive(starredButton.rx.image() )
+            .disposed(by: disposeBag)
     }
     
     private func setupUI() {

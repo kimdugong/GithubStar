@@ -67,14 +67,16 @@ class RemoteViewController: UIViewController {
     private func bind() {
         searchBar.rx.text.orEmpty.filter{ $0 != "" }.debounce(.milliseconds(500), scheduler: MainScheduler.instance).distinctUntilChanged().debug("search bar text").bind(to: viewModel.inputs.query).disposed(by: disposeBag)
         
-        viewModel.inputs.query.withUnretained(viewModel).flatMapLatest{ $0.0.inputs.searchUsers(name: $0.1) }.bind(to: tableView.rx.items(cellIdentifier: UserTableViewCell.identifier, cellType: UserTableViewCell.self)){row, model, cell in
-            let viewModel = UserTableViewCellViewModel(name: model.name, avatar: model.avatar, isStarred: false)
-            cell.configurationCell(viewModel: viewModel)
+        viewModel.inputs.query
+            .withUnretained(viewModel)
+            .flatMapLatest{ $0.0.inputs.searchUsers(name: $0.1) }
+            .bind(to: viewModel.outputs.users)
+            .disposed(by: disposeBag)
+        
+        viewModel.outputs.users.bind(to: tableView.rx.items(cellIdentifier: UserTableViewCell.identifier, cellType: UserTableViewCell.self)){ [unowned self] row, model, cell in
+            let cellViewModel = UserTableViewCellViewModel(user: model, userTableViewModel: viewModel)
+            cell.configurationCell(viewModel: cellViewModel)
         }.disposed(by: disposeBag)
-
-//        viewModel.outputs.dataSource.bind(to: tableView.rx.items(cellIdentifier: UserTableViewCell.identifier, cellType: UserTableViewCell.self)){row, model, cell in
-//            print(model.name)
-//        }.disposed(by: disposeBag)
     }
     
 }
