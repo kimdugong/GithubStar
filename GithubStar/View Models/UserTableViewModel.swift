@@ -14,7 +14,7 @@ protocol UserTableViewModelInputs {
     var query2: PublishSubject<String> { get }
     var starreds: BehaviorRelay<[Starred]> { get }
     var filtteredStarreds: BehaviorRelay<[Starred]> { get }
-    func searchUsers(name: String) -> Single<[User]>
+    func searchUsers(name: String) -> Single<GithubResponse<User>>
 }
 
 protocol UserTableViewModelOutputs {
@@ -36,14 +36,11 @@ class UserTableViewModel: UserTableViewModelInputs, UserTableViewModelOutputs {
     var starreds: BehaviorRelay<[Starred]>
     var filtteredStarreds: BehaviorRelay<[Starred]> = BehaviorRelay<[Starred]>(value: [])
     
-    func searchUsers(name: String) -> Single<[User]> {
-        return network.getUsers(name: name)
-            .debug("res")
-            .catch({ error in
-                debugPrint(#function, "error : ", error)
-                return Single<GithubResponse<User>>.never()
-            })
-                    .map{ $0.items }
+    func searchUsers(name: String) -> Single<GithubResponse<User>> {
+        return network.getUsers(name: name).catch({ error in
+            debugPrint(#function, "error : ", error)
+            return Single<GithubResponse<User>>.never()
+        })
     }
     
     init(networkProvider: Provider, coreDataProvider: Provider) {
@@ -56,9 +53,9 @@ class UserTableViewModel: UserTableViewModelInputs, UserTableViewModelOutputs {
             query == "" ? list : list.filter{ $0.name?.lowercased().hasPrefix(query.lowercased()) ?? false }
         }.bind(to: filtteredStarreds).disposed(by: disposeBag)
         
-//        query2.withLatestFrom(starreds) { query, list in
-//            query == "" ? list : list.filter{ $0.name?.lowercased().hasPrefix(query.lowercased()) ?? false }
-//        }.bind(to: filtteredStarreds).disposed(by: disposeBag)
+        //        query2.withLatestFrom(starreds) { query, list in
+        //            query == "" ? list : list.filter{ $0.name?.lowercased().hasPrefix(query.lowercased()) ?? false }
+        //        }.bind(to: filtteredStarreds).disposed(by: disposeBag)
         
         filtteredStarreds
             .map({ starreds in

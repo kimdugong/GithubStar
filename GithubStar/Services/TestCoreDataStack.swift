@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreData
-import GithubStar
 
 class TestCoreDataStack: CoreDataStack {
     override init() {

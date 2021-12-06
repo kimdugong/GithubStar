@@ -37,6 +37,7 @@ class UserTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        avatarImageView.image = nil
         disposeBag = DisposeBag()
     }
 
@@ -56,7 +57,7 @@ class UserTableViewCell: UITableViewCell {
             .observe(on: ConcurrentDispatchQueueScheduler(qos: .background))
             .flatMapLatest{ URLSession.shared.rx.data(request: URLRequest(url: $0))}
             .map{ UIImage(data: $0)}
-//            .subscribe(on: MainScheduler.instance)
+            .subscribe(on: MainScheduler.instance)
             .bind(to: avatarImageView.rx.image)
             .disposed(by: disposeBag)
         

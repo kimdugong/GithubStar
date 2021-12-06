@@ -77,7 +77,7 @@ class LocalViewController: UIViewController {
     }
     
     private func bind() {
-        searchBar.rx.text.orEmpty.debug("search bar text").bind(to: viewModel.inputs.query2).disposed(by: disposeBag)
+        searchBar.rx.text.orEmpty.bind(to: viewModel.inputs.query2).disposed(by: disposeBag)
         
         viewModel.outputs.starredsUser
             .map({ starredsArray -> [SectionModel] in
@@ -86,6 +86,14 @@ class LocalViewController: UIViewController {
                 })
             })
             .bind(to: tableView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
+        
+        searchBar.rx.searchButtonClicked.withUnretained(searchBar).bind{ $0.0.resignFirstResponder() }.disposed(by: disposeBag)
+        
+        view.rx.tapGesture(configuration: { recognizer, _ in recognizer.cancelsTouchesInView = false })
+            .when(.recognized)
+            .asDriver(onErrorDriveWith: .never())
+            .drive{ [weak self] _ in self?.view.endEditing(true) }
             .disposed(by: disposeBag)
     }
 }
@@ -96,8 +104,4 @@ extension LocalViewController: UITableViewDelegate {
     }
 }
 
-extension LocalViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(#function, searchText)
-    }
-}
+extension LocalViewController: UISearchBarDelegate {}

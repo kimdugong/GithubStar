@@ -8,7 +8,6 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import SnapKit
 import RxDataSources
 
 class RemoteViewController: UIViewController {
@@ -48,12 +47,12 @@ class RemoteViewController: UIViewController {
     }()
     
     private let viewModel: UserTableViewModel
-
+    
     init(viewModel: UserTableViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -63,18 +62,12 @@ class RemoteViewController: UIViewController {
         setupUI()
         bind()
     }
-
+    
     private func setupUI() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        
-//        tableView.tableHeaderView = searchController.searchBar
-//        searchController.obscuresBackgroundDuringPresentation = false
-//        searchController.searchResultsUpdater = self
-//        searchController.hidesNavigationBarDuringPresentation = false
-//        self.extendedLayoutIncludesOpaqueBars = true
     }
     
     private func bind() {
@@ -83,38 +76,27 @@ class RemoteViewController: UIViewController {
         viewModel.inputs.query
             .withUnretained(viewModel)
             .flatMapLatest{ $0.0.inputs.searchUsers(name: $0.1) }
+            .map{ $0.items }
             .bind(to: viewModel.outputs.users)
             .disposed(by: disposeBag)
         
-//        viewModel.outputs.users.bind(to: tableView.rx.items(cellIdentifier: UserTableViewCell.identifier, cellType: UserTableViewCell.self)){ [unowned self] row, model, cell in
-//            let cellViewModel = UserTableViewCellViewModel(user: model, userTableViewModel: viewModel)
-//            cell.configurationCell(viewModel: cellViewModel)
-//        }.disposed(by: disposeBag)
         viewModel.outputs.users.map{ [SectionModel(model: "", items: $0)] }.bind(to: tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
+        
+        searchBar.rx.searchButtonClicked.withUnretained(searchBar).bind{ $0.0.resignFirstResponder() }.disposed(by: disposeBag)
+        
+        view.rx.tapGesture(configuration: { recognizer, _ in recognizer.cancelsTouchesInView = false })
+            .when(.recognized)
+            .asDriver(onErrorDriveWith: .never())
+            .drive{ [weak self] _ in self?.view.endEditing(true) }
+            .disposed(by: disposeBag)
     }
     
 }
 
 extension RemoteViewController: UITableViewDelegate {
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        if let parent = self.parent?.parent as? PageViewController {
-//            parent.scrollView.contentSize = scrollView.contentSize
-//            parent.scrollView.contentInset = scrollView.contentInset
-//            parent.scrollView.contentOffset = scrollView.contentOffset
-//            parent.scrollView.decelerationRate = scrollView.decelerationRate
-//            parent.scrollView.panGestureRecognizer.state = scrollView.panGestureRecognizer.state
-//            parent.scrollView.directionalPressGestureRecognizer.state = scrollView.directionalPressGestureRecognizer.state
-//        }
-//    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
-    
 }
 
-extension RemoteViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(#function, searchText)
-    }
-}
+extension RemoteViewController: UISearchBarDelegate {}

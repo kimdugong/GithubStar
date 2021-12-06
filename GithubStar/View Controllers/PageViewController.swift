@@ -8,6 +8,8 @@
 import UIKit
 import Tabman
 import Pageboy
+import SnapKit
+import RxGesture
 
 class PageViewController: TabmanViewController {
     private var viewControllers: [UIViewController]
