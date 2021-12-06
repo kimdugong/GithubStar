@@ -11,7 +11,7 @@ import RxSwift
 
 protocol Networkable {
     var gitHubProvider: MoyaProvider<Github> { get }
-    func getUsers(name: String) -> Single<GithubResponse<User>>
+    func getUsers(name: String, page: Int) -> Single<GithubResponse<User>>
 }
 
 class Network: Networkable {
@@ -20,7 +20,7 @@ class Network: Networkable {
     init(provider: Provider = .production) {
         switch provider {
         case .production:
-            self.gitHubProvider = MoyaProvider<Github>(stubClosure: MoyaProvider.neverStub, plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .default))])
+            self.gitHubProvider = MoyaProvider<Github>(stubClosure: MoyaProvider.neverStub, plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .successResponseBody))])
         case .mock:
             self.gitHubProvider = MoyaProvider<Github>(stubClosure: MoyaProvider.immediatelyStub, plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))])
         }
@@ -30,8 +30,8 @@ class Network: Networkable {
      error:
      Response Body: {"message":"Validation Failed","errors":[{"resource":"Search","field":"q","code":"missing"}],"documentation_url":"https://docs.github.com/v3/search"}
      */
-    func getUsers(name: String) -> Single<GithubResponse<User>> {
-        gitHubProvider.rx.request(.fetchUsers(name: name), callbackQueue: .main).debug("getUsers").map(GithubResponse<User>.self).catch { error in
+    func getUsers(name: String, page: Int) -> Single<GithubResponse<User>> {
+        gitHubProvider.rx.request(.fetchUsers(name: name, page: page), callbackQueue: .main).debug("getUsers").map(GithubResponse<User>.self).catch { error in
             debugPrint(#function, "error : ", error)
             return Single.error(error)
         }

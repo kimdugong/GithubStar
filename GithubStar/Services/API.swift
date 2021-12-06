@@ -9,7 +9,7 @@ import Foundation
 import Moya
 
 enum Github {
-    case fetchUsers(name: String)
+    case fetchUsers(name: String, page: Int)
 }
 
 extension Github: TargetType {
@@ -19,22 +19,22 @@ extension Github: TargetType {
     
     var path: String {
         switch self {
-        case .fetchUsers(_):
+        case .fetchUsers(_, _):
             return "/search/users"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .fetchUsers(_):
+        case .fetchUsers(_, _):
             return .get
         }
     }
     
     var task: Task {
         switch self {
-        case .fetchUsers(let name):
-            return .requestParameters(parameters: ["q": name], encoding: URLEncoding.default)
+        case .fetchUsers(let name, let page):
+            return .requestParameters(parameters: ["q": name, "page": page], encoding: URLEncoding.default)
         }
     }
     
@@ -44,14 +44,14 @@ extension Github: TargetType {
     
     var validationType: ValidationType {
         switch self {
-        case .fetchUsers(_):
+        case .fetchUsers(_, _):
             return .successCodes
         }
     }
     
     var sampleData: Data {
         switch self {
-        case .fetchUsers(_):
+        case .fetchUsers(_, _):
             return """
                         {
                           "total_count": 12,

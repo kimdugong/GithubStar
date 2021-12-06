@@ -15,11 +15,14 @@ protocol UserTableViewModelInputs {
     var starreds: BehaviorRelay<[Starred]> { get }
     var filtteredStarreds: BehaviorRelay<[Starred]> { get }
     func searchUsers(name: String) -> Single<GithubResponse<User>>
+    func searchMoreUser(name: String) -> Single<GithubResponse<User>>
 }
 
 protocol UserTableViewModelOutputs {
     var users: BehaviorRelay<[User]> { get }
     var starredsUser: BehaviorRelay<[[Starred]]> { get }
+    var totalCount: BehaviorRelay<Int> { get }
+    var page: BehaviorRelay<Int> { get }
 }
 
 class UserTableViewModel: UserTableViewModelInputs, UserTableViewModelOutputs {
@@ -27,8 +30,11 @@ class UserTableViewModel: UserTableViewModelInputs, UserTableViewModelOutputs {
     var coreData: StarredService
     private let disposeBag = DisposeBag()
     
+    // MARK: - Outputs
     var users: BehaviorRelay<[User]> = BehaviorRelay<[User]>(value: [])
     var starredsUser: BehaviorRelay<[[Starred]]> = BehaviorRelay<[[Starred]]>(value: [])
+    var totalCount: BehaviorRelay<Int> = BehaviorRelay<Int>(value: 0)
+    var page: BehaviorRelay<Int> = BehaviorRelay<Int>(value: 1)
     
     // MARK: - Inputs
     var query: PublishSubject<String> = PublishSubject<String>()
@@ -37,7 +43,18 @@ class UserTableViewModel: UserTableViewModelInputs, UserTableViewModelOutputs {
     var filtteredStarreds: BehaviorRelay<[Starred]> = BehaviorRelay<[Starred]>(value: [])
     
     func searchUsers(name: String) -> Single<GithubResponse<User>> {
-        return network.getUsers(name: name).catch({ error in
+        return network.getUsers(name: name, page: 1).catch({ error in
+            debugPrint(#function, "error : ", error)
+            return Single<GithubResponse<User>>.never()
+        })
+    }
+
+    func searchMoreUser(name: String) -> Single<GithubResponse<User>> {
+        if users.value.count == totalCount.value {
+            return Single<GithubResponse<User>>.never()
+        }
+        
+        return network.getUsers(name: name, page: page.value + 1).catch({ error in
             debugPrint(#function, "error : ", error)
             return Single<GithubResponse<User>>.never()
         })
@@ -52,10 +69,6 @@ class UserTableViewModel: UserTableViewModelInputs, UserTableViewModelOutputs {
         Observable.combineLatest(query2, starreds).map { query, list in
             query == "" ? list : list.filter{ $0.name?.lowercased().hasPrefix(query.lowercased()) ?? false }
         }.bind(to: filtteredStarreds).disposed(by: disposeBag)
-        
-        //        query2.withLatestFrom(starreds) { query, list in
-        //            query == "" ? list : list.filter{ $0.name?.lowercased().hasPrefix(query.lowercased()) ?? false }
-        //        }.bind(to: filtteredStarreds).disposed(by: disposeBag)
         
         filtteredStarreds
             .map({ starreds in

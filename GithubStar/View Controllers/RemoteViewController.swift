@@ -76,8 +76,13 @@ class RemoteViewController: UIViewController {
         viewModel.inputs.query
             .withUnretained(viewModel)
             .flatMapLatest{ $0.0.inputs.searchUsers(name: $0.1) }
-            .map{ $0.items }
-            .bind(to: viewModel.outputs.users)
+            .withUnretained(viewModel)
+            .subscribe(onNext: { (viewModel, res) in
+                viewModel.outputs.users.accept(res.items)
+                viewModel.outputs.page.accept(1)
+                viewModel.outputs.totalCount.accept(res.totalCount)
+                print(".flatMapLatest{ $0.0.inputs.searchUsers(name: $0.1) }", res.isIncompleted)
+            })
             .disposed(by: disposeBag)
         
         viewModel.outputs.users.map{ [SectionModel(model: "", items: $0)] }.bind(to: tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
@@ -89,8 +94,22 @@ class RemoteViewController: UIViewController {
             .asDriver(onErrorDriveWith: .never())
             .drive{ [weak self] _ in self?.view.endEditing(true) }
             .disposed(by: disposeBag)
+        
+        let bottomTouch = tableView.rx.contentOffset
+            .flatMapLatest { [unowned self] offset in offset.y + tableView.frame.size.height + 20 > tableView.contentSize.height ? Signal.just(offset.y) : Signal.empty() }
+            .buffer(timeSpan: .never, count: 2, scheduler: MainScheduler.instance)
+            .flatMapLatest{ $0[1] > $0[0] ? Signal.just($0[1]) : Signal.empty() }
+            .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
+        
+        bottomTouch.withLatestFrom(viewModel.inputs.query)
+            .withUnretained(viewModel).flatMapLatest{ $0.0.inputs.searchMoreUser(name: $0.1) }
+            .withUnretained(viewModel)
+            .subscribe { (viewModel, res) in
+                viewModel.outputs.users.accept( viewModel.outputs.users.value + res.items)
+                viewModel.outputs.page.accept(viewModel.outputs.page.value + 1)
+                viewModel.outputs.totalCount.accept(res.totalCount)
+            }.disposed(by: disposeBag)
     }
-    
 }
 
 extension RemoteViewController: UITableViewDelegate {

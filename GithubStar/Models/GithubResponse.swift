@@ -9,11 +9,11 @@ import Foundation
 
 struct GithubResponse<T: Codable>: Codable {
     private enum CodingKeys: String, CodingKey {
-        case totalCount = "total_count", isCompleted = "incomplete_results", items
+        case totalCount = "total_count", isIncompleted = "incomplete_results", items
     }
     
     let totalCount: Int
-    let isCompleted: Bool
+    let isIncompleted: Bool
     let items: [T]
     
 }
