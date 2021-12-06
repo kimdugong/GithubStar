@@ -18,7 +18,7 @@ class GithubStarTests: XCTestCase {
 
     override func setUpWithError() throws {
         coreDataStack = TestCoreDataStack()
-        starredService = StarredService(coreDataStack: coreDataStack)
+        starredService = StarredService(provider: .mock)
         network = Network(provider: .mock)
     }
 
@@ -29,7 +29,7 @@ class GithubStarTests: XCTestCase {
     }
 
     func testAddStarred() throws {
-        let user = User(name: "dugong", avatar: "https://avatar.com")
+        let user = User(id: 12345, name: "dugong", avatar: "https://avatar.com")
         let starred = starredService.add(user: user)
 
         XCTAssertEqual(starred.name, "dugong")
@@ -37,7 +37,7 @@ class GithubStarTests: XCTestCase {
     }
 
     func testFetchStarred() throws {
-        let user = User(name: "dugong", avatar: "https://avatar.com")
+        let user = User(id: 12345, name: "dugong", avatar: "https://avatar.com")
         let _ = starredService.add(user: user)
         let starreds = starredService.getStarreds()
 
@@ -46,7 +46,7 @@ class GithubStarTests: XCTestCase {
     }
 
     func testDeleteStarred() throws {
-        let user = User(name: "dugong", avatar: "https://avatar.com")
+        let user = User(id: 12345, name: "dugong", avatar: "https://avatar.com")
         let starred = starredService.add(user: user)
         var starredList = starredService.getStarreds()
         XCTAssertEqual(starredList?.count, 1)
@@ -58,7 +58,7 @@ class GithubStarTests: XCTestCase {
     }
 
     func testUpdateStarred() throws {
-        let user = User(name: "dugong", avatar: "https://avatar.com")
+        let user = User(id: 12345, name: "dugong", avatar: "https://avatar.com")
         let starred = starredService.add(user: user)
 
         XCTAssertEqual(starred.name, "dugong")
@@ -75,7 +75,7 @@ class GithubStarTests: XCTestCase {
     }
     
     func testSearchUsers() throws {
-        let users = network.getUsers(name: "mojombo")
+        let users = network.getUsers(name: "mojombo", page: 1)
         let result = try users.toBlocking(timeout: 2).first()?.items.first
         XCTAssertEqual(result?.avatar, "https://secure.gravatar.com/avatar/25c7c18223fb42a4c6ae1c8db6f50f9b?d=https://a248.e.akamai.net/assets.github.com%2Fimages%2Fgravatars%2Fgravatar-user-420.png")
         XCTAssertEqual(result?.name, "mojombo")
