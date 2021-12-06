@@ -15,5 +15,4 @@ struct GithubResponse<T: Codable>: Codable {
     let totalCount: Int
     let isIncompleted: Bool
     let items: [T]
-    
 }

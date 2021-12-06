@@ -60,13 +60,6 @@ class PageViewController: TabmanViewController {
             make.top.leading.trailing.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
         }
-        
-//        view.addSubview(scrollView)
-//        scrollView.snp.makeConstraints { make in
-//            make.size.edges.equalToSuperview()
-//        }
-//        view.sendSubviewToBack(scrollView)
-        
     }
 }
 

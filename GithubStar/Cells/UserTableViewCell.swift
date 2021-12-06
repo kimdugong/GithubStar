@@ -80,6 +80,7 @@ class UserTableViewCell: UITableViewCell {
             .disposed(by: disposeBag)
     }
     
+    // MARK: - Setting Up UI
     private func setupUI() {
         contentView.addSubview(userNameLabel)
         contentView.addSubview(avatarImageView)

@@ -20,7 +20,7 @@ class Network: Networkable {
     init(provider: Provider = .production) {
         switch provider {
         case .production:
-            self.gitHubProvider = MoyaProvider<Github>(stubClosure: MoyaProvider.neverStub, plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .successResponseBody))])
+            self.gitHubProvider = MoyaProvider<Github>(stubClosure: MoyaProvider.neverStub, plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .errorResponseBody))])
         case .mock:
             self.gitHubProvider = MoyaProvider<Github>(stubClosure: MoyaProvider.immediatelyStub, plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))])
         }

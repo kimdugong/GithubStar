@@ -30,6 +30,7 @@
 		425A8F17275C63900097373A /* UserTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425A8F16275C63900097373A /* UserTableViewCellViewModel.swift */; };
 		425A8F19275CC3190097373A /* Provider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425A8F18275CC3190097373A /* Provider.swift */; };
 		425A8F1A275CC39A0097373A /* TestCoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424B7486275761FB00CFDD19 /* TestCoreDataStack.swift */; };
+		429E2857275E219C002D904B /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 429E2856275E219C002D904B /* README.md */; };
 		DADEE59AF0A850A23100A6C2 /* Pods_GithubStar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3831B2DF9BE33416426EFE9C /* Pods_GithubStar.framework */; };
 		E819FF4183AF0A9BF96B0090 /* Pods_GithubStar_GithubStarUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A22B1227ACF17AB259B1B072 /* Pods_GithubStar_GithubStarUITests.framework */; };
 /* End PBXBuildFile section */
@@ -81,6 +82,7 @@
 		425A8F14275BBD9E0097373A /* GithubResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubResponse.swift; sourceTree = "<group>"; };
 		425A8F16275C63900097373A /* UserTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		425A8F18275CC3190097373A /* Provider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Provider.swift; sourceTree = "<group>"; };
+		429E2856275E219C002D904B /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4C4182D5E39211FF07B594EB /* Pods_GithubStarTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_GithubStarTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		67191DD963D98F3B51F6134B /* Pods-GithubStar.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GithubStar.release.xcconfig"; path = "Target Support Files/Pods-GithubStar/Pods-GithubStar.release.xcconfig"; sourceTree = "<group>"; };
 		7C70EBA75E7DF7410F89F632 /* Pods-GithubStar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GithubStar.debug.xcconfig"; path = "Target Support Files/Pods-GithubStar/Pods-GithubStar.debug.xcconfig"; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 		424B74422755EF3400CFDD19 = {
 			isa = PBXGroup;
 			children = (
+				429E2856275E219C002D904B /* README.md */,
 				424B744D2755EF3400CFDD19 /* GithubStar */,
 				424B74672755EF3900CFDD19 /* GithubStarTests */,
 				424B74712755EF3900CFDD19 /* GithubStarUITests */,
@@ -364,6 +367,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				429E2857275E219C002D904B /* README.md in Resources */,
 				424B745E2755EF3800CFDD19 /* LaunchScreen.storyboard in Resources */,
 				424B745B2755EF3800CFDD19 /* Assets.xcassets in Resources */,
 			);

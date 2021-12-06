@@ -19,11 +19,13 @@ protocol UserTableViewCellViewModelOutputs {
 }
 
 class UserTableViewCellViewModel: UserTableViewCellViewModelInputs, UserTableViewCellViewModelOutputs {
-    var isStarred: BehaviorRelay<Bool> = BehaviorRelay<Bool>(value: false)
-    
-    var user: BehaviorRelay<User>
-    
     private let userTableViewModel: UserTableViewModel
+    
+    // MARK: - Outputs
+    var isStarred: BehaviorRelay<Bool> = BehaviorRelay<Bool>(value: false)
+
+    // MARK: - Inputs
+    var user: BehaviorRelay<User>
     
     func starredButtonTapped() {
         guard let starreds = userTableViewModel.coreData.getStarred(user: user.value), !starreds.isEmpty else {
@@ -41,6 +43,9 @@ class UserTableViewCellViewModel: UserTableViewCellViewModelInputs, UserTableVie
         updateDataSource(updatedUser: updatedUser)
     }
     
+    
+    /// UserTableViewModel Datasource를 업데이트한다.
+    /// - Parameter updatedUser: 업데이트된 유저
     private func updateDataSource(updatedUser: User) {
         let users = userTableViewModel.outputs.users.value.map { user -> User in
             if user.id == updatedUser.id {

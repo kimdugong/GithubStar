@@ -63,6 +63,7 @@ class RemoteViewController: UIViewController {
         bind()
     }
     
+    // MARK: - Setting Up UI
     private func setupUI() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
@@ -71,7 +72,7 @@ class RemoteViewController: UIViewController {
     }
     
     private func bind() {
-        searchBar.rx.text.orEmpty.filter{ $0 != "" }.debounce(.milliseconds(500), scheduler: MainScheduler.instance).distinctUntilChanged().debug("search bar text").bind(to: viewModel.inputs.query).disposed(by: disposeBag)
+        searchBar.rx.text.orEmpty.filter{ $0 != "" }.debounce(.milliseconds(1500), scheduler: MainScheduler.instance).distinctUntilChanged().debug("search bar text").bind(to: viewModel.inputs.query).disposed(by: disposeBag)
         
         viewModel.inputs.query
             .withUnretained(viewModel)

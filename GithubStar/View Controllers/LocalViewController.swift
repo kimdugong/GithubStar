@@ -65,6 +65,7 @@ class LocalViewController: UIViewController {
         bind()
     }
     
+    // MARK: - Setting Up UI
     private func setupUI() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
