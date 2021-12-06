@@ -7,6 +7,7 @@
 
 import UIKit
 import RxSwift
+import Kingfisher
 
 class UserTableViewCell: UITableViewCell {
     static let identifier = "UserTableViewCell"
@@ -40,7 +41,7 @@ class UserTableViewCell: UITableViewCell {
         avatarImageView.image = nil
         disposeBag = DisposeBag()
     }
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -52,13 +53,21 @@ class UserTableViewCell: UITableViewCell {
     
     func configurationCell(viewModel: UserTableViewCellViewModel) {
         viewModel.inputs.user.map{ $0.name }.bind(to: userNameLabel.rx.text).disposed(by: disposeBag)
-        viewModel.inputs.user.map{ URL(string: $0.avatar) }
+        
+        //        viewModel.inputs.user.map{ URL(string: $0.avatar) }
+        //            .compactMap{ $0 }
+        //            .observe(on: ConcurrentDispatchQueueScheduler(qos: .background))
+        //            .flatMapLatest{ URLSession.shared.rx.data(request: URLRequest(url: $0))}
+        //            .map{ UIImage(data: $0)}
+        //            .subscribe(on: MainScheduler.instance)
+        //            .bind(to: avatarImageView.rx.image)
+        //            .disposed(by: disposeBag)
+        
+        viewModel.inputs.user
+            .map{ URL(string: $0.avatar) }
             .compactMap{ $0 }
-            .observe(on: ConcurrentDispatchQueueScheduler(qos: .background))
-            .flatMapLatest{ URLSession.shared.rx.data(request: URLRequest(url: $0))}
-            .map{ UIImage(data: $0)}
-            .subscribe(on: MainScheduler.instance)
-            .bind(to: avatarImageView.rx.image)
+            .withUnretained(avatarImageView)
+            .subscribe { (imageView, url) in imageView.kf.setImage(with: url) }
             .disposed(by: disposeBag)
         
         starredButton.rx.tap.bind{ viewModel.inputs.starredButtonTapped() }.disposed(by: disposeBag)
@@ -94,5 +103,5 @@ class UserTableViewCell: UITableViewCell {
             make.centerY.equalTo(avatarImageView)
         }
     }
-
+    
 }

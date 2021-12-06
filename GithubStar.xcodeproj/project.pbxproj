@@ -155,6 +155,7 @@
 		424B744D2755EF3400CFDD19 /* GithubStar */ = {
 			isa = PBXGroup;
 			children = (
+				429E2855275E1CB9002D904B /* Extension */,
 				425A8F13275BBD780097373A /* Models */,
 				425A8F10275BBA380097373A /* View Models */,
 				424B74B22758C13500CFDD19 /* Cells */,
@@ -242,6 +243,13 @@
 				424B74572755EF3400CFDD19 /* GithubStar.xcdatamodeld */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		429E2855275E1CB9002D904B /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		C4D4D11D60B2A79C4CBFC292 /* Frameworks */ = {

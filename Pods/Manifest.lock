@@ -1,6 +1,7 @@
 PODS:
   - Alamofire (5.4.4)
   - Differentiator (5.0.0)
+  - Kingfisher (6.3.1)
   - Moya/Core (15.0.0):
     - Alamofire (~> 5.0)
   - Moya/RxSwift (15.0.0):
@@ -27,6 +28,7 @@ PODS:
     - Pageboy (~> 3.6.0)
 
 DEPENDENCIES:
+  - Kingfisher
   - Moya/RxSwift
   - RxBlocking
   - RxDataSources
@@ -39,6 +41,7 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - Differentiator
+    - Kingfisher
     - Moya
     - Pageboy
     - RxBlocking
@@ -53,6 +56,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: f3b09a368f1582ab751b3fff5460276e0d2cf5c9
   Differentiator: e8497ceab83c1b10ca233716d547b9af21b9344d
+  Kingfisher: 016c8b653a35add51dd34a3aba36b580041acc74
   Moya: 138f0573e53411fb3dc17016add0b748dfbd78ee
   Pageboy: cf121b9dd48c63f3f281b2a9ec93d02e0f23879b
   RxBlocking: 0b29f7d2079109a8de49c411381bed7c33ef1eeb
@@ -64,6 +68,6 @@ SPEC CHECKSUMS:
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   Tabman: 792ac76fd1ec95af175c93db880a3c47cabedc91
 
-PODFILE CHECKSUM: fcf414e32aa76348c1a8b07c3ac732cba2f2f255
+PODFILE CHECKSUM: 7a3e431c22c03f82222ba6778e728856bf28e366
 
 COCOAPODS: 1.11.2

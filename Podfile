@@ -12,6 +12,7 @@ target 'GithubStar' do
   pod 'RxDataSources'
   pod 'Moya/RxSwift'
   pod 'RxGesture'
+  pod 'Kingfisher'
   # UI frameworks
   pod 'Tabman'
   pod 'SnapKit'
