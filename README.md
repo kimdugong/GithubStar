@@ -2,7 +2,7 @@
 
 Github API를 이용한 Github 사용자 즐겨찾기 앱
 
-![screen shot](https://d.pr/i/G03uSF)
+[screen shot](https://d.pr/i/G03uSF)
 
 ## architecture
 
