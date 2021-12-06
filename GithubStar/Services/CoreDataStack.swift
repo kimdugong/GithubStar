@@ -83,6 +83,7 @@ open class CoreDataStack {
 
     public func fetch<T: NSManagedObject>(request: NSFetchRequest<T>) -> [T]? {
         do {
+            request.sortDescriptors = [.init(key: "name", ascending: true, selector: #selector(NSString.caseInsensitiveCompare))]
             let fetchResult = try context.fetch(request)
             return fetchResult
         } catch let error as NSError {

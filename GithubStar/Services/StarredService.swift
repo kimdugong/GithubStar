@@ -38,6 +38,7 @@ public class StarredService {
 
     public func add(user: User) -> Starred {
         let starred = Starred(context: coreDataStack.context)
+        starred.id = Int32(user.id)
         starred.name = user.name
         starred.avatar = user.avatar
 

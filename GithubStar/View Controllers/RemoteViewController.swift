@@ -9,6 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import SnapKit
+import RxDataSources
 
 class RemoteViewController: UIViewController {
     private let disposeBag: DisposeBag = DisposeBag()
@@ -32,6 +33,18 @@ class RemoteViewController: UIViewController {
         bar.delegate = self
         bar.placeholder = "검색어를 입력하세요"
         return bar
+    }()
+    
+    private lazy var dataSource: RxTableViewSectionedReloadDataSource<SectionModel<String, User>> = {
+        let dataSource = RxTableViewSectionedReloadDataSource<SectionModel<String, User>>  { [unowned self] dataSource, tableView, indexPath, model in
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: UserTableViewCell.identifier) as? UserTableViewCell else {
+                return UITableViewCell()
+            }
+            let cellViewModel = UserTableViewCellViewModel(user: model, userTableViewModel: viewModel)
+            cell.configurationCell(viewModel: cellViewModel)
+            return cell
+        }
+        return dataSource
     }()
     
     private let viewModel: UserTableViewModel
@@ -73,10 +86,11 @@ class RemoteViewController: UIViewController {
             .bind(to: viewModel.outputs.users)
             .disposed(by: disposeBag)
         
-        viewModel.outputs.users.bind(to: tableView.rx.items(cellIdentifier: UserTableViewCell.identifier, cellType: UserTableViewCell.self)){ [unowned self] row, model, cell in
-            let cellViewModel = UserTableViewCellViewModel(user: model, userTableViewModel: viewModel)
-            cell.configurationCell(viewModel: cellViewModel)
-        }.disposed(by: disposeBag)
+//        viewModel.outputs.users.bind(to: tableView.rx.items(cellIdentifier: UserTableViewCell.identifier, cellType: UserTableViewCell.self)){ [unowned self] row, model, cell in
+//            let cellViewModel = UserTableViewCellViewModel(user: model, userTableViewModel: viewModel)
+//            cell.configurationCell(viewModel: cellViewModel)
+//        }.disposed(by: disposeBag)
+        viewModel.outputs.users.map{ [SectionModel(model: "", items: $0)] }.bind(to: tableView.rx.items(dataSource: dataSource)).disposed(by: disposeBag)
     }
     
 }

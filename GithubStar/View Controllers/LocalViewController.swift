@@ -7,6 +7,7 @@
 
 import UIKit
 import RxSwift
+import RxDataSources
 
 class LocalViewController: UIViewController {
     private let disposeBag: DisposeBag = DisposeBag()
@@ -33,6 +34,19 @@ class LocalViewController: UIViewController {
         return bar
     }()
     
+    private lazy var dataSource: RxTableViewSectionedReloadDataSource<SectionModel<String, Starred>> = {
+        let dataSource = RxTableViewSectionedReloadDataSource<SectionModel<String, Starred>>  { [unowned self] dataSource, tableView, indexPath, model in
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: UserTableViewCell.identifier) as? UserTableViewCell else {
+                return UITableViewCell()
+            }
+            let user = User(id: model.id, name: model.name!, avatar: model.avatar!, isStarred: true)
+            let cellViewModel = UserTableViewCellViewModel(user: user, userTableViewModel: viewModel)
+            cell.configurationCell(viewModel: cellViewModel)
+            return cell
+        }
+        return dataSource
+    }()
+    
     private let viewModel: UserTableViewModel
     
     init(viewModel: UserTableViewModel) {
@@ -56,15 +70,23 @@ class LocalViewController: UIViewController {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        dataSource.titleForHeaderInSection = { dataSource, index in
+            return dataSource.sectionModels[index].model
+        }
     }
     
     private func bind() {
-        searchBar.rx.text.orEmpty.filter{ $0 != "" }.debug("search bar text").bind(to: viewModel.inputs.query2).disposed(by: disposeBag)
+        searchBar.rx.text.orEmpty.debug("search bar text").bind(to: viewModel.inputs.query2).disposed(by: disposeBag)
         
-        viewModel.outputs.starredsUser.debug("starreds user").bind(to: tableView.rx.items(cellIdentifier: UserTableViewCell.identifier, cellType: UserTableViewCell.self)){ [unowned self] row, model, cell in
-            let cellViewModel = UserTableViewCellViewModel(user: User(name: model.name!, avatar: model.avatar!, isStarred: true), userTableViewModel: viewModel)
-            cell.configurationCell(viewModel: cellViewModel)
-        }.disposed(by: disposeBag)
+        viewModel.outputs.starredsUser
+            .map({ starredsArray -> [SectionModel] in
+                starredsArray.map ({ starreds -> SectionModel in
+                    SectionModel(model: String(starreds.first?.name?.lowercased().prefix(1) ?? ""), items: starreds)
+                })
+            })
+            .bind(to: tableView.rx.items(dataSource: dataSource))
+            .disposed(by: disposeBag)
     }
 }
 
